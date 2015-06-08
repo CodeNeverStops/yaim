@@ -5,11 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="/css/common.css">
 </head>
 
 <body>
-    <!--
-    Your HTML goes here. Visit purecss.io/layouts/ for some sample HTML code.
-    -->
+<div class="content">
+    <form class="pure-form pure-form-aligned" method="post" action="/signup">
+        <fieldset>
+            <div class="pure-control-group">
+                <label for="name">Username</label>
+                <input id="name" name="name" type="text" placeholder="Username">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Password">
+            </div>
+
+            <div class="pure-control-group">
+                <label for="password">Password Again</label>
+                <input id="password_again" name="password_again" type="password" placeholder="Password Again">
+            </div>
+
+            <div class="pure-controls">
+                <button type="submit" class="pure-button pure-button-primary">Register</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript" src="/js/sign.js"></script>
 </body>
 </html>
