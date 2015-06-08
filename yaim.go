@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 	"io/ioutil"
+	"github.com/lokizone/yaim/models"
 )
 
 const (
@@ -37,7 +38,7 @@ func main() {
 func serveHttp(w http.ResponseWriter, r *http.Request) {
 	var (
 		contentType string
-		isTpl bool
+		isStatic bool = true
 	)
 
 	path := r.URL.Path[1:]
@@ -48,28 +49,52 @@ func serveHttp(w http.ResponseWriter, r *http.Request) {
 		contentType = "text/javascript"
 	} else {
 		contentType = "text/html"
-		isTpl = true
+		isStatic = false
 	}
 
 	w.Header().Set("Content-Type", contentType + "; charset=utf-8")
-	if isTpl {
-		if path == "" {
-			path = "index"
-		}
-		template := templates.Lookup(path + ".html")
-		if template == nil {
-			w.WriteHeader(404)
-			return
-		}
-		template.Execute(w, nil)
-	} else {
+	if isStatic {
 		data, err := ioutil.ReadFile(PublicPath + "/" + string(path))
 		if err != nil {
 			w.WriteHeader(404)
-			return
+		} else {
+			w.Write(data)
 		}
-		w.Write(data)
+		return
 	}
+
+	if r.Method == "POST" {
+		r.ParseForm()
+		var ret bool
+		var action string
+		switch path {
+			case "signin":
+				ret = models.SignIn(r.PostForm["name"][0], r.PostForm["password"][0])
+				action = "login"
+			case "signup":
+				ret = models.SignUp(r.PostForm["name"][0], r.PostForm["password"][0], r.PostForm["password_again"][0])
+				action = "register"
+		}
+		var result string
+		if (ret) {
+			result = action + " success"
+		} else {
+			result = action + " failed"
+		}
+		w.WriteHeader(200)
+		w.Write([]byte(result))
+		return
+	}
+
+	if path == "" {
+		path = "index"
+	}
+	template := templates.Lookup(path + ".html")
+	if template == nil {
+		w.WriteHeader(404)
+		return
+	}
+	template.Execute(w, nil)
 }
 
 func serveWs(w http.ResponseWriter, r *http.Request) {

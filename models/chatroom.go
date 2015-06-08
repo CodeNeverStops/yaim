@@ -1,4 +1,4 @@
-package yaim
+package models
 
 import (
 	"time"
