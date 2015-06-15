@@ -5,13 +5,15 @@ import (
 	//"fmt"
 	//_ "database/sql"
 	//_ "github.com/go-sql-driver/mysql"
+	"debug/dwarf"
 )
 
 type Chatroom struct {
 	id       int
-	chatType string
+	chatType byte // u or g
 	createAt time.Time
-	members  []User
+	members  map[int]*User
+	sessions map[int]*session
 }
 
 func init() {
