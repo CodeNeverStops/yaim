@@ -4,10 +4,19 @@ import (
 	"fmt"
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"time"
 )
 
 type User struct {
+	userId  uint32
 	account string
+}
+
+type UserDetail struct {
+	User
+	password string
+	avatar   string
+	createAt time.Time
 }
 
 var dsn string

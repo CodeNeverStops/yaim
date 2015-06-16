@@ -20,7 +20,7 @@ var upgrader = websocket.Upgrader{
 }
 
 type connection struct {
-	ws *websocket.Conn
+	ws   *websocket.Conn
 	send chan []byte
 }
 
@@ -39,7 +39,7 @@ func (c *connection) readPump() {
 		if err != nil {
 			break
 		}
-		<- message
+		<-message
 	}
 }
 
@@ -83,7 +83,7 @@ func serveWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c := &connection{send: make(chan []byte, 256), ws: ws}
-	<- c
+	<-c
 	go c.writePump()
 	c.readPump()
 }

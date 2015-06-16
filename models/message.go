@@ -2,9 +2,9 @@ package models
 
 import (
 	"time"
-	//"fmt"
-	//_ "database/sql"
-	//_ "github.com/go-sql-driver/mysql"
+//"fmt"
+//_ "database/sql"
+//_ "github.com/go-sql-driver/mysql"
 )
 
 type Message struct {
