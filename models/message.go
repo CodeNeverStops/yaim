@@ -1,18 +1,26 @@
 package models
 
 import (
-	"time"
 //"fmt"
 //_ "database/sql"
 //_ "github.com/go-sql-driver/mysql"
 )
 
+const (
+	msgTypeText = 0
+	msgTypeImage = 1
+	msgTypeVoice = 2
+
+	msgTargetUser = 0
+	msgTargetGroup = 1
+)
+
 type Message struct {
-	chatId      string // ug|123|456, uu|123|789
-	senderId    int
-	message     string
-	messageType string
-	createAt    time.Time
+	senderId    uint32  `json:"sender_id"`
+	targetId    uint32    `json:"target_id"`
+	targetType  byte    `json:"target_type"`
+	messageType byte    `json:"message_type"`
+	message     []byte    `json:"message"`
 }
 
 func init() {

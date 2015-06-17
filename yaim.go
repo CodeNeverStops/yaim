@@ -33,6 +33,8 @@ func main() {
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
+
+	models.RunApp()
 }
 
 func serveHttp(w http.ResponseWriter, r *http.Request) {
@@ -98,6 +100,7 @@ func serveHttp(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveWs(w http.ResponseWriter, r *http.Request) {
+
 	fmt.Println("serve ws")
 }
 
@@ -118,4 +121,3 @@ func parseTemplates() *template.Template {
 	result.ParseFiles(*templatePaths...)
 	return result
 }
-

@@ -9,39 +9,54 @@ import (
 )
 
 type session struct {
-	sessionId string
-	userId    uint32
-	account   string
-	conn      *connection
+	sid     string
+	userId  uint32
+	account string
+	conn    *connection
 }
 
 type SessionPool struct {
-	pool map[uint32]*session
+	sid map[string]*session
+	uid map[uint32]*session
 }
+
+var UserSession map[uint32]*session
 
 func NewSessionPool() *SessionPool {
 	return &SessionPool{
-		pool: make(map[uint32]*session),
+		sid: make(map[string]*session),
+		uid: make(map[uint32]*session),
 	}
 }
 
-func (this *SessionPool) NewSession(userId uint32, account string, conn *connection) {
-	sessionId := this.genSessionId(userId, account)
-	s = &session{sessionId, userId, account, conn}
+func (this *SessionPool) NewSession(userId uint32, account string, conn *connection) string {
+	sid := this.genSessionId(userId, account)
+	s := &session{sid, userId, account, conn}
 	this.addSession(s)
+	return sid
 }
 
-func (this *SessionPool) GetSession(userId uint32) *session {
-	s, _ := this.pool[userId]
+func (this *SessionPool) GetSessionByUserId(userId uint32) *session {
+	s, _ := this.uid[userId]
 	return s
 }
 
-func (this *SessionPool) DelSession(userId uint32) {
-	delete(this.pool, userId)
+func (this *SessionPool) GetSession(sid string) *session {
+	s, _ := this.sid[sid]
+	return s
+}
+
+func (this *SessionPool) DelSession(sid string) {
+	s := this.GetSession(sid)
+	if s {
+		delete(this.sid, sid)
+		delete(this.uid, s.userId)
+	}
 }
 
 func (this *SessionPool) addSession(s *session) {
-	this.pool[s.userId] = s;
+	this.sid[s.sid] = s;
+	this.uid[s.userId] = s
 }
 
 func (this *SessionPool) genSessionId(userId uint32, account string) string {
